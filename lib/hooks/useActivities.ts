@@ -13,41 +13,49 @@ interface ActivityWithStatus extends Activity {
   isCompleted: boolean;
 }
 
-export function useActivities() {
+interface UseActivitiesOptions {
+  date?: string; // Optional date in YYYY-MM-DD format
+}
+
+export function useActivities(options: UseActivitiesOptions = {}) {
   const { programData } = useProgram();
   
-  // Track current date to force recalculation when day changes
-  const [currentDate, setCurrentDate] = useState(() => new Date().toISOString().split('T')[0]);
-
-  // Check if date has changed every minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newDate = new Date().toISOString().split('T')[0];
-      if (newDate !== currentDate) {
-        setCurrentDate(newDate);
-      }
-    }, 60000); // Check every minute
-
-    return () => clearInterval(interval);
-  }, [currentDate]);
+  // Get current local date in YYYY-MM-DD format (not UTC!)
+  const getCurrentLocalDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  // Use provided date or calculate current date fresh (no caching)
+  const currentDate = getCurrentLocalDate();
+  const viewDate = options.date || currentDate;
 
   const todaysActivities: ActivityWithStatus[] = useMemo(() => {
     if (!programData.startDate) {
       return [];
     }
 
-    const todayKey = currentDate;
-    const programDays = getDaysSinceStart(programData.startDate);
+    const todayKey = viewDate;
+    
+    // Calculate days since start for the view date
+    const viewDateObj = new Date(viewDate);
+    viewDateObj.setHours(0, 0, 0, 0);
+    const startDate = new Date(programData.startDate);
+    startDate.setHours(0, 0, 0, 0);
+    
+    const diffTime = viewDateObj.getTime() - startDate.getTime();
+    const daysSince = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const programDays = daysSince + 1;
+    
     const dayName = getCycleDayName(programDays);
     const activities = WEEK_ACTIVITIES[dayName] || [];
 
     const todayProgress = programData.todayProgress[todayKey] || {};
 
-    const startDate = new Date(programData.startDate);
-    startDate.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const isProgramStarted = today >= startDate;
+    const isProgramStarted = viewDateObj >= startDate;
 
     return activities.map((activity) => {
       const isCompleted = todayProgress[activity.id] || false;
@@ -59,7 +67,7 @@ export function useActivities() {
         isCompleted,
       };
     });
-  }, [programData.startDate, programData.todayProgress, currentDate]);
+  }, [programData.startDate, programData.todayProgress, viewDate]);
 
   const completedCount = useMemo(() => {
     return todaysActivities.filter((a) => a.isCompleted).length;
@@ -75,5 +83,7 @@ export function useActivities() {
     completedCount,
     totalCount: todaysActivities.length,
     completionPercentage,
+    viewDate,
+    currentDate,
   };
 }

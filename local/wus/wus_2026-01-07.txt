@@ -1,0 +1,68 @@
+KADJOT FITNESS - WORK UNIT SESSION LOG
+=======================================
+Date: 2026-01-07 Wednesday
+Branch: main
+
+================================================================================
+WUS-001: Date Navigation & Local Date Fix
+================================================================================
+SWUS: 2026-01-07 Wednesday 05:30:00 PST
+Branch: main
+
+OBJECTIVE:
+Fix issue where app was showing wrong date (Jan 6 instead of Jan 7) and implement
+previous/next day navigation for browsing daily activities.
+
+COMPLETED TASKS:
+1. ✅ Identified timezone issue - toISOString() returns UTC, not local date
+2. ✅ Fixed date calculation in useActivities.ts to use local date:
+   - Created getCurrentLocalDate() helper function
+   - Returns YYYY-MM-DD in user's local timezone (not UTC)
+3. ✅ Implemented day navigation in TodaysActivities.tsx:
+   - "Previous Day" button (navigate backward)
+   - "Next Day" button (navigate forward)
+   - "Today" button (return to current day, only shows when not on today)
+4. ✅ Modified useActivities hook to accept optional date parameter
+5. ✅ Tested: App now correctly shows January 7, 2026 (Wednesday)
+6. ✅ Created /local folder structure for project SOPs and logging
+7. ✅ Created user-agent_sops_kadjot.txt with project-specific SOPs
+
+TECHNICAL CHANGES:
+Files Modified:
+- lib/hooks/useActivities.ts
+  * Added getCurrentLocalDate() function for timezone-safe date calculation
+  * Removed useState/useEffect caching (caused stale date issues)
+  * Accept optional date parameter for navigation
+  
+- components/dashboard/TodaysActivities.tsx
+  * Added displayDate state for navigation
+  * Added navigateDay('prev'|'next') and goToToday() functions
+  * Added navigation buttons UI below activity list
+  * Pass date prop to useActivities hook
+
+KEY INSIGHTS:
+- Critical Fix: Always use local date for user-facing date displays
+- UTC vs Local: toISOString() can show wrong date for users ahead of UTC
+- Navigation Pattern: State management in parent component, prop drilling to hooks
+
+FILES CREATED:
+- /local/user-agent_sops_kadjot.txt (SOPs for kadjot-next project)
+- /local/wus/wus_2026-01-07.txt (this file)
+- /local/env_log.txt (environment setup commands)
+
+CURRENT STATE:
+✅ App displays correct local date (January 7, 2026)
+✅ Users can navigate to previous/next days
+✅ Activities update correctly based on selected date
+✅ "Today" button appears when viewing past/future days
+✅ All functionality tested and working in browser
+✅ Local folder structure created with SOPs and logs
+
+NEXT AGENT:
+- Branch: main
+- App running on: Frontend (localhost:3001), Backend (localhost:3000)
+- Ready for next feature or commit/push to GitHub
+
+EWUS: 2026-01-07 Wednesday 05:50:00 PST
+Status: READY FOR COMMIT & PUSH
+================================================================================

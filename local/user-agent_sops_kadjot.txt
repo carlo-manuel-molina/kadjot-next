@@ -1,0 +1,126 @@
+KADJOT FITNESS PROJECT SOPS - STANDARD OPERATING PROCEDURES
+============================================================
+NOTE: This file is synced with .cursor/commands/sops.md
+Keep both files in sync when making updates.
+
+User Shortcuts
+1. bfe - build and fix errors
+2. g - go ahead
+3. ho - hold on, let's step back and look at the bigger picture
+4. wus - work unit session (1 complete user-agent session)
+5. swus - start wus: 
+   Step 1: Get the correct date for Philippines (run date command)
+   Step 2: Create a new wus log in /local/wus/wus_YYYY-MM-DD.txt (one file per calendar day); create an ewus for open swus if there are any
+6. ewus - end wus: close wus log - review user-agent sops file for any updates; create a concise summary of what was done in the wus, and state of things at time of ewus; make sure env_log is also updated; ALWAYS followed by cpt and c&p (commit and push)
+7. k - Keep a log of all the commands needed to recreate the environment in local/env_log.txt
+8. r - review and update agent's context by reviewing local folder files for any updates
+9. cpt - clean-up and plant trace - do the misc loggings (sops, wus, env) - log all env-related commands executed
+10. c&p - commit and push changes to git
+
+SOPs (IMPORTANT! FOLLOW THESE IN OUR SESSIONS!)
+1. Agent should analyse and plan out moves together with the user. Agent updates the code from its end, but should explain every change and should wait for user's approval before implementing changes. Give enough multi-perspective context for the user to be able to have an informed decision on the next move. ALWAYS IMPLEMENT DRYLY.
+2. Agent runs commands from its end whenever possible. For DB changes, the agent should give the user a mysql command that the user can copy-paste on mysql cli
+3. Agent will do a build (verification) after every code update and can start the development server from its end.
+4. Agent can only run DB commands in the local env. For production, the agent needs to give the user the commands he can run from his end.
+5. Explain-first interaction style for code edits
+   - Before edits: state What/Why (1–2 lines), list files, and show minimal diffs/snippets.
+   - Then apply edits and verify/test. Afterward: report Impact/Test and a quick Rollback tip.
+   - Group larger changes; parallelize read-only lookups.
+   - Log key milestones to local/wus/wus_YYYY-MM-DD.txt (SWUS/EWUS and checkpoints).
+6. Keep a log of all the commands needed to recreate the environment in local/env_log.txt
+7. Include working branch details in all logs (local/wus/wus_YYYY-MM-DD.txt, local/env_log.txt) - specify which git branch work was performed on, any branch switches, and final branch state for next agent
+8. Create concise, one-liner commits - keep commit messages clear and brief
+
+9. **Documentation Format Requirements** (CRITICAL!)
+   - ALL documentation files in local/ folder MUST be plain text (.txt)
+   - NO markdown files (.md) in local/ folder
+   - Use plain text formatting (ASCII art, equals signs, dashes for headers)
+   - Reason: Consistency and readability in terminal/text editors
+
+10. **Local Folder Organization** (Reference Map)
+    Structure:
+    local/
+    ├── user-agent_sops_kadjot.txt  ← SOPs (this file, top level)
+    ├── env_log.txt                 ← Environment setup commands (top level)
+    ├── wus/                        ← Work Unit Session logs (one file per day)
+    │   └── wus_YYYY-MM-DD.txt      ← Daily WUS logs (e.g., wus_2026-01-07.txt)
+    └── session-notes/              ← Session logs & notes (as needed)
+
+PROJECT CONTEXT & DOMAIN REQUIREMENTS
+=====================================
+KADJOT FITNESS - 12-Week Core Strength Program
+
+Purpose: Personal fitness tracking application for a progressive 12-week core strength and running program designed to build foundation, increase strength, and achieve peak performance.
+
+Program Structure:
+- Duration: 12 weeks (84 days)
+- 4 Phases:
+  * Foundation Phase (Weeks 1-2): Building base strength
+  * Building Phase (Weeks 3-6): Progressive overload
+  * Strength Phase (Weeks 7-10): Advanced movements
+  * Peak Performance (Weeks 11-12): Maximum capacity
+
+Activity Types:
+1. Core Workout (4-5x/week): Dead Bug, Glute Bridge, Side Plank, Bird Dog
+   - Includes 2-minute warm-up (Cat-Cow, Torso Rotations, Knee Raises)
+2. Beach/Sand Running (2-4x/week): Low-impact cardio on packed sand
+3. Gym Workout (2-3x/week): Leg Press, Cable Row, Goblet Squat, Back Extension
+4. Desk Reset (Daily): Pelvic Tilts, Hip Flexor Stretch, Upper-Back Extension
+5. Mobility & Stretching (3x/week): Cat-Cow, Child's Pose, Hip Flexor Stretch
+
+Key Features:
+- Activity Status Tracking: upcoming, ongoing, missed, completed
+- Progress Visualization: days completed, weekly progress, phase tracking
+- Activity Instructions: Structured exercise details with images and tips
+- Date Navigation: Browse past/future daily activities
+- Calendar Export: Generate .ics files for daily plans
+- Dual Mode: Guest mode (localStorage) and authenticated mode (MySQL backend)
+
+Technical Requirements:
+- Time-sensitive Activity States: Activities have 30-minute windows
+- Completion Tracking: Days marked 100% complete when all activities done
+- Date Handling: Use LOCAL date (not UTC) for accurate day tracking
+- Activity Scheduling: 7-day cycle (Monday-Sunday) based on program day
+- Progress Persistence: localStorage for guests, MySQL for authenticated users
+
+User Flow:
+1. Start Program (set start date & day start time)
+2. View Today's Activities (auto-calculated based on program day)
+3. Complete Activities (checkboxes, visual feedback)
+4. Track Progress (daily completion %, days completed counter)
+5. Navigate Days (previous/next day buttons)
+6. View Instructions (modal with exercise details, images, tips)
+7. Export to Calendar (download daily plan as .ics file)
+
+Critical Implementation Notes:
+- **Date Calculation**: MUST use local date, not UTC (timezone-sensitive users)
+- **Activity Mapping**: Day 1 = Monday, cycles through 7-day week
+- **Completion Logic**: Day marked complete only when ALL activities at 100%
+- **Modal Content**: Show specific exercise instructions, not full HTML files
+- **Image Display**: Support multiple images per exercise (imageUrls array)
+- **State Management**: React Context for program data, activity toggles
+
+Current Techstack:
+Next.js 15.5.3 (App Router)
+React 18+
+TypeScript
+Tailwind CSS
+Node.js + Express (backend API)
+MySQL (user auth & program storage)
+localStorage (guest mode fallback)
+
+Development Commands:
+Frontend: cd /Users/carlomanuelmolina/Sites/kadjot-next && npm run dev (port 3001)
+Backend: cd /Users/carlomanuelmolina/Sites/kadjot-next/backend && npm start (port 3000)
+Helper Scripts: ./start.sh (starts both), ./stop.sh (stops both)
+
+Local DB creds:
+Host: localhost
+Port: 3306
+Database: kadjot
+User: root
+Password: (from backend/config.js)
+
+Git Repository:
+https://github.com/carlo-manuel-molina/kadjot-next.git
+Branch: main

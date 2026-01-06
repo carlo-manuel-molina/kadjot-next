@@ -1,0 +1,131 @@
+KADJOT FITNESS - ENVIRONMENT LOG
+=================================
+Commands to recreate the development environment from scratch
+
+SYSTEM REQUIREMENTS
+===================
+- Node.js 18+ (v20.x recommended)
+- npm 9+
+- MySQL 8+
+- macOS/Linux/Windows with WSL
+- Git
+
+INITIAL SETUP
+=============
+1. Clone Repository:
+   git clone https://github.com/carlo-manuel-molina/kadjot-next.git
+   cd kadjot-next
+
+2. Install Frontend Dependencies:
+   npm install
+
+3. Install Backend Dependencies:
+   cd backend
+   npm install
+   cd ..
+
+DATABASE SETUP
+==============
+4. Create MySQL Database:
+   mysql -u root -p
+   CREATE DATABASE kadjot;
+   USE kadjot;
+   SOURCE backend/schema.sql;
+   EXIT;
+
+5. Configure Backend:
+   cd backend
+   cp config.example.js config.js
+   # Edit config.js with your MySQL credentials
+   nano config.js
+
+ENVIRONMENT CONFIGURATION
+=========================
+6. Backend config.js should contain:
+   module.exports = {
+     db: {
+       host: 'localhost',
+       user: 'root',
+       password: 'YOUR_PASSWORD',
+       database: 'kadjot'
+     },
+     port: 3000,
+     sessionSecret: 'your-secret-key-change-in-production'
+   };
+
+RUNNING THE APPLICATION
+=======================
+7. Start Both Servers (Recommended):
+   ./start.sh
+   
+   OR manually:
+   
+8. Start Backend (Terminal 1):
+   cd backend
+   npm start
+   # Runs on http://localhost:3000
+
+9. Start Frontend (Terminal 2):
+   npm run dev
+   # Runs on http://localhost:3001
+
+10. Stop Servers:
+    ./stop.sh
+    
+    OR manually:
+    pkill -f "node server.js"
+    pkill -f "next dev"
+
+DEVELOPMENT COMMANDS
+====================
+Build Frontend:
+  npm run build
+
+Lint Check:
+  npm run lint
+
+Production Build & Start:
+  npm run build
+  npm start
+
+BROWSER TESTING
+===============
+Open: http://localhost:3001
+Test Accounts:
+  - Guest Mode: No login required
+  - Create Account: Register new user
+  - Login: Use existing credentials
+
+TROUBLESHOOTING
+===============
+If port 3001 already in use:
+  lsof -ti:3001 | xargs kill -9
+
+If port 3000 already in use:
+  lsof -ti:3000 | xargs kill -9
+
+If MySQL connection fails:
+  - Check MySQL is running: sudo systemctl status mysql
+  - Verify credentials in backend/config.js
+  - Ensure database 'kadjot' exists
+
+Clear localStorage (if testing guest mode):
+  Open DevTools → Application → Local Storage → Clear
+
+CURRENT ENVIRONMENT (2026-01-07)
+=================================
+Branch: main
+Node Version: v20.x
+Frontend Port: 3001
+Backend Port: 3000
+Database: kadjot (MySQL localhost:3306)
+Timezone: Asia/Manila (PST - PHP Standard Time)
+
+RECENT ENVIRONMENT CHANGES
+===========================
+2026-01-07:
+  - Created /local folder structure
+  - Added user-agent_sops_kadjot.txt
+  - Added wus_logs.txt
+  - Added env_log.txt (this file)
+  - Fixed timezone issue (local date vs UTC)
