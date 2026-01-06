@@ -7,6 +7,7 @@ import { Activity, ActivityStatus } from '../../lib/types';
 import { shouldDisableCheckbox, getStatusBadgeClass, getStatusText } from '../../lib/utils/activityHelpers';
 import { useProgram } from '../../contexts/ProgramContext';
 import Modal from '../ui/Modal';
+import { getActivityInstruction, ActivityInstruction } from '../../lib/utils/activityInstructions';
 
 interface ActivityWithStatus extends Activity {
   status: ActivityStatus;
@@ -20,8 +21,7 @@ interface ActivityCardProps {
 export default function ActivityCard({ activity }: ActivityCardProps) {
   const { toggleActivity } = useProgram();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [htmlContent, setHtmlContent] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [instruction, setInstruction] = useState<ActivityInstruction | null>(null);
   const isDisabled = shouldDisableCheckbox(activity.status);
   const statusText = getStatusText(activity.status);
   const statusClass = getStatusBadgeClass(activity.status);
@@ -29,28 +29,16 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
   const handleToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation(); // Prevent event bubbling
     if (!isDisabled) {
-      console.log('Toggling activity:', activity.id, 'from', activity.isCompleted, 'to', !activity.isCompleted);
       await toggleActivity(activity.id);
     }
   };
 
-  const handleInstructionsClick = async (e: React.MouseEvent) => {
+  const handleInstructionsClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation(); // Prevent event bubbling
-    setIsLoading(true);
+    const activityInstruction = getActivityInstruction(activity.id);
+    setInstruction(activityInstruction);
     setIsModalOpen(true);
-
-    try {
-      // Fetch the HTML file
-      const response = await fetch(activity.link);
-      const html = await response.text();
-      setHtmlContent(html);
-    } catch (error) {
-      console.error('Error loading instructions:', error);
-      setHtmlContent('<p class="text-stone-700">Failed to load instructions. Please try again.</p>');
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -126,20 +114,130 @@ export default function ActivityCard({ activity }: ActivityCardProps) {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={`📖 ${activity.name} - Instructions`}
+        title={instruction?.title || `📖 ${activity.name}`}
       >
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="text-center">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-              <p className="mt-4 text-gray-600 font-semibold">Loading instructions...</p>
+        {instruction ? (
+          <div className="space-y-6">
+            {/* Duration and Description */}
+            <div className="bg-gradient-to-r from-lime-50 to-green-50 p-4 rounded-lg border-l-4 border-lime-500">
+              <p className="text-sm font-bold text-lime-800">⏱️ Duration: {instruction.duration}</p>
+              <p className="text-sm text-stone-700 mt-2">{instruction.description}</p>
             </div>
+
+            {/* Exercises */}
+            <div className="space-y-5">
+              {instruction.exercises.map((exercise, index) => (
+                <div key={index} className="bg-amber-50 p-5 rounded-lg border-l-4 border-amber-500">
+                  <h4 className="font-bold text-lg text-stone-800 mb-2">{exercise.name}</h4>
+                  
+                  {/* Exercise Meta */}
+                  <div className="flex flex-wrap gap-3 mb-3 text-xs font-bold text-amber-800">
+                    {exercise.sets && <span className="bg-amber-100 px-2 py-1 rounded">Sets: {exercise.sets}</span>}
+                    {exercise.reps && <span className="bg-amber-100 px-2 py-1 rounded">Reps: {exercise.reps}</span>}
+                    {exercise.duration && <span className="bg-amber-100 px-2 py-1 rounded">Duration: {exercise.duration}</span>}
+                  </div>
+
+                  {/* Images if available */}
+                  {exercise.imageUrls && exercise.imageUrls.length > 0 ? (
+                    <div className="space-y-3 mb-4">
+                      {exercise.imageUrls.map((url, imgIndex) => (
+                        <img 
+                          key={imgIndex}
+                          src={url} 
+                          alt={`${exercise.name} - Image ${imgIndex + 1}`}
+                          className="w-full max-w-md mx-auto rounded-lg shadow-md"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                        />
+                      ))}
+                    </div>
+                  ) : exercise.imageUrl ? (
+                    <img 
+                      src={exercise.imageUrl} 
+                      alt={exercise.name}
+                      className="w-full max-w-md mx-auto rounded-lg shadow-md mb-4"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                    />
+                  ) : null}
+
+                  {/* Instructions */}
+                  <div className="mb-3">
+                    <p className="text-xs font-bold text-stone-800 mb-1">Instructions:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-sm text-stone-700">
+                      {exercise.instructions.map((step, i) => (
+                        <li key={i}>{step}</li>
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Tips */}
+                  {exercise.tips && exercise.tips.length > 0 && (
+                    <div className="bg-green-50 p-3 rounded border border-green-200">
+                      <p className="text-xs font-bold text-green-800 mb-1">💡 Tips:</p>
+                      <ul className="list-disc list-inside space-y-1 text-xs text-green-700">
+                        {exercise.tips.map((tip, i) => (
+                          <li key={i}>{tip}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* General Tips */}
+            {instruction.tips && instruction.tips.length > 0 && (
+              <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+                <p className="text-sm font-bold text-green-800 mb-2">💡 General Tips:</p>
+                <ul className="list-disc list-inside space-y-1 text-sm text-green-700">
+                  {instruction.tips.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Progression */}
+            {instruction.progression && instruction.progression.length > 0 && (
+              <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                <p className="text-sm font-bold text-blue-800 mb-2">📈 Progression:</p>
+                <ul className="list-disc list-inside space-y-1 text-sm text-blue-700">
+                  {instruction.progression.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Warnings */}
+            {instruction.warnings && instruction.warnings.length > 0 && (
+              <div className="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                <p className="text-sm font-bold text-red-800 mb-2">⚠️ Important Warnings:</p>
+                <ul className="list-disc list-inside space-y-1 text-sm text-red-700">
+                  {instruction.warnings.map((warning, i) => (
+                    <li key={i}>{warning}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Full Reference Link */}
+            {instruction.fullReferenceLink && (
+              <div className="pt-4 border-t border-stone-200">
+                <a 
+                  href={instruction.fullReferenceLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-sm text-lime-700 hover:text-lime-900 font-bold underline"
+                >
+                  📚 View Full Reference Document →
+                </a>
+              </div>
+            )}
           </div>
         ) : (
-          <div 
-            className="prose prose-blue max-w-none"
-            dangerouslySetInnerHTML={{ __html: htmlContent }}
-          />
+          <div className="text-center py-8 text-stone-600">
+            <p>Instructions not available for this activity.</p>
+          </div>
         )}
       </Modal>
     </>

@@ -62,7 +62,6 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
     try {
       // Clean up old localStorage key from HTML version
       if (localStorage.getItem(OLD_STORAGE_KEY)) {
-        console.log('Removing old program data from previous HTML version');
         localStorage.removeItem(OLD_STORAGE_KEY);
       }
 
@@ -173,7 +172,6 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
         // Save to backend API
         const result = await programApi.create(startDate, dayStartTime);
         setProgramId(result.program_id);
-        console.log('Program created in database with ID:', result.program_id);
       }
       
       // Update local state
@@ -235,21 +233,11 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
         if (isFullyComplete && !wasInCompletedDays) {
           // Day just reached 100%, add to completedDays
           updatedCompletedDays.push(dateKey);
-          console.log(`✅ Day ${dateKey} completed 100%! Total completed days: ${updatedCompletedDays.length}`);
         } else if (!isFullyComplete && wasInCompletedDays) {
           // Day was 100% but no longer is, remove from completedDays
           updatedCompletedDays = updatedCompletedDays.filter(d => d !== dateKey);
-          console.log(`⚠️ Day ${dateKey} no longer 100%. Total completed days: ${updatedCompletedDays.length}`);
         }
       }
-
-      console.log(`Activity ${activityId} toggled locally:`, {
-        dateKey,
-        wasCompleted,
-        nowCompleted,
-        allProgress: newProgress[dateKey],
-        completedDays: updatedCompletedDays.length
-      });
 
       // Try to save to backend for authenticated users
       if (isAuthenticated && programId) {
@@ -257,7 +245,6 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
           try {
             // Note: Backend expects day_plan_id, but for simplicity we'll use programId
             // This is a workaround - ideally we'd create/fetch day plans properly
-            console.log('Saving activity to backend:', { programId, activityId, nowCompleted });
             // For now, just save to localStorage as the backend integration needs more work
             localStorage.setItem(STORAGE_KEY, JSON.stringify({
               ...prev,
