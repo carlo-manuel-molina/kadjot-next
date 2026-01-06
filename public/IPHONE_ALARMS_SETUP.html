@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Alarms Setup - Fitness Program</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f7;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #007AFF;
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+        
+        .alarm-card {
+            background: #f9f9f9;
+            border-left: 5px solid #007AFF;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .alarm-card.morning {
+            border-left-color: #FF9500;
+        }
+        
+        .alarm-card.midday {
+            border-left-color: #34C759;
+        }
+        
+        .alarm-card.evening {
+            border-left-color: #5856D6;
+        }
+        
+        .alarm-time {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 5px;
+        }
+        
+        .alarm-label {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #007AFF;
+            margin-bottom: 10px;
+        }
+        
+        .alarm-repeat {
+            color: #666;
+            font-size: 1em;
+            margin: 5px 0;
+        }
+        
+        .alarm-note {
+            color: #888;
+            font-size: 0.9em;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        th {
+            background: #007AFF;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e5e7;
+        }
+        
+        tr:hover {
+            background: #f9f9f9;
+        }
+        
+        .tip-box {
+            background: #E8F4FD;
+            border-left: 4px solid #007AFF;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 6px;
+        }
+        
+        .tip-box h3 {
+            margin-top: 0;
+            color: #007AFF;
+        }
+        
+        .checklist {
+            background: #FFF9E6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .checklist h3 {
+            color: #F9A825;
+            margin-top: 0;
+        }
+        
+        .checklist ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .checklist li {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 6px;
+            font-size: 1.05em;
+        }
+        
+        .checklist li:before {
+            content: "☐ ";
+            font-size: 1.3em;
+            color: #F9A825;
+            margin-right: 10px;
+        }
+        
+        .instructions {
+            background: linear-gradient(135deg, #34C759 0%, #30D158 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .instructions h2 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .instructions ol {
+            font-size: 1.1em;
+            line-height: 2;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏰ iPhone Alarms Setup</h1>
+        <p class="subtitle">7 Alarms to Keep You On Track</p>
+        
+        <div class="instructions">
+            <h2>📱 How to Set Up Each Alarm:</h2>
+            <ol>
+                <li>Open <strong>Clock</strong> app on iPhone</li>
+                <li>Tap <strong>Alarm</strong> tab at bottom</li>
+                <li>Tap <strong>+</strong> (top right corner)</li>
+                <li>Set the time shown below</li>
+                <li>Tap <strong>Repeat</strong> and select the days</li>
+                <li>Tap <strong>Label</strong> and enter the activity name</li>
+                <li>Choose a <strong>Sound</strong></li>
+                <li>Tap <strong>Save</strong></li>
+            </ol>
+        </div>
+        
+        <h2 style="color: #007AFF; margin-top: 40px;">🔔 Your 7 Alarms:</h2>
+        
+        <!-- Alarm 1 -->
+        <div class="alarm-card morning">
+            <div class="alarm-time">5:00 AM</div>
+            <div class="alarm-label">Alarm 1: Wake Up - Fitness Day</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+            </div>
+            <div class="alarm-note">💡 Use your loudest alarm! Turn OFF snooze.</div>
+        </div>
+        
+        <!-- Alarm 2 -->
+        <div class="alarm-card morning">
+            <div class="alarm-time">5:15 AM</div>
+            <div class="alarm-label">Alarm 2: Core Workout (15 min)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Monday, Thursday
+            </div>
+            <div class="alarm-note">💡 Use motivating, energetic tone. Dead Bug, Glute Bridge, Side Plank, Bird Dog</div>
+        </div>
+        
+        <!-- Alarm 3 -->
+        <div class="alarm-card morning">
+            <div class="alarm-time">5:15 AM</div>
+            <div class="alarm-label">Alarm 3: Running (3-4 km)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Tuesday, Saturday
+            </div>
+            <div class="alarm-note">💡 Use motivating, energetic tone. Easy pace, conversational.</div>
+        </div>
+        
+        <!-- Alarm 4 -->
+        <div class="alarm-card midday">
+            <div class="alarm-time">12:00 PM</div>
+            <div class="alarm-label">Alarm 4: Lunch Desk Reset (5-8 min)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Monday, Tuesday, Wednesday, Thursday, Friday
+            </div>
+            <div class="alarm-note">💡 Gentle reminder. Pelvic Tilts, Hip Flexor Stretch, Upper-Back Extension</div>
+        </div>
+        
+        <!-- Alarm 5 -->
+        <div class="alarm-card midday">
+            <div class="alarm-time">3:00 PM</div>
+            <div class="alarm-label">Alarm 5: Afternoon Desk Reset (5-8 min)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Monday, Tuesday, Wednesday, Thursday, Friday
+            </div>
+            <div class="alarm-note">💡 Gentle reminder. Same exercises as lunchtime.</div>
+        </div>
+        
+        <!-- Alarm 6 -->
+        <div class="alarm-card evening">
+            <div class="alarm-time">5:45 PM</div>
+            <div class="alarm-label">Alarm 6: Gym Time (45-60 min)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Wednesday, Saturday
+            </div>
+            <div class="alarm-note">💡 Leave work at 5:30pm to arrive by 6pm. Leg Press, Cable Row, Goblet Squat, Back Extension</div>
+        </div>
+        
+        <!-- Alarm 7 -->
+        <div class="alarm-card evening">
+            <div class="alarm-time">7:00 PM</div>
+            <div class="alarm-label">Alarm 7: Mobility & Stretching (12 min)</div>
+            <div class="alarm-repeat">
+                <strong>Repeat:</strong> Friday
+            </div>
+            <div class="alarm-note">💡 Gentle, calming tone. Cat-Cow, Child's Pose, Knees-to-Chest</div>
+        </div>
+        
+        <div class="checklist">
+            <h3>✅ Setup Checklist</h3>
+            <ul>
+                <li>5:00 AM - Wake Up (Mon-Sat)</li>
+                <li>5:15 AM - Core Workout (Mon, Thu)</li>
+                <li>5:15 AM - Running (Tue, Sat)</li>
+                <li>12:00 PM - Lunch Desk Reset (Mon-Fri)</li>
+                <li>3:00 PM - Afternoon Desk Reset (Mon-Fri)</li>
+                <li>5:45 PM - Gym Time (Wed, Sat)</li>
+                <li>7:00 PM - Mobility (Fri)</li>
+            </ul>
+        </div>
+        
+        <h2 style="color: #007AFF;">📅 Weekly Overview</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>5:00am</th>
+                    <th>5:15am</th>
+                    <th>12:00pm</th>
+                    <th>3:00pm</th>
+                    <th>5:45pm</th>
+                    <th>7:00pm</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Mon</strong></td>
+                    <td>Wake</td>
+                    <td>Core</td>
+                    <td>Desk Reset</td>
+                    <td>Desk Reset</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>Tue</strong></td>
+                    <td>Wake</td>
+                    <td>Run</td>
+                    <td>Desk Reset</td>
+                    <td>Desk Reset</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>Wed</strong></td>
+                    <td>Wake</td>
+                    <td>-</td>
+                    <td>Desk Reset</td>
+                    <td>Desk Reset</td>
+                    <td>Gym</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>Thu</strong></td>
+                    <td>Wake</td>
+                    <td>Core</td>
+                    <td>Desk Reset</td>
+                    <td>Desk Reset</td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td><strong>Fri</strong></td>
+                    <td>Wake</td>
+                    <td>-</td>
+                    <td>Desk Reset</td>
+                    <td>Desk Reset</td>
+                    <td>-</td>
+                    <td>Mobility</td>
+                </tr>
+                <tr>
+                    <td><strong>Sat</strong></td>
+                    <td>Wake</td>
+                    <td>Run</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>Gym</td>
+                    <td>-</td>
+                </tr>
+                <tr style="background: #E8F5E9;">
+                    <td><strong>Sun</strong></td>
+                    <td colspan="6" style="text-align: center;"><strong>REST DAY - No Alarms 🌿</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="tip-box">
+            <h3>💡 Pro Tips</h3>
+            <ul>
+                <li><strong>Sound Selection:</strong>
+                    <ul>
+                        <li>5:00 AM Wake Up → Loudest alarm you have</li>
+                        <li>5:15 AM Workouts → Motivating, energetic</li>
+                        <li>12pm & 3pm Desk Resets → Gentle reminder</li>
+                        <li>7:00 PM Mobility → Calming, relaxing</li>
+                    </ul>
+                </li>
+                <li><strong>Snooze:</strong> Turn OFF snooze for 5:00 AM. Allow snooze for desk resets (in case you're in a meeting).</li>
+                <li><strong>Volume:</strong> Make sure alarm volume is high enough. Test each alarm!</li>
+                <li><strong>Phone Placement:</strong> Keep phone across the room for 5:00 AM alarm so you have to get up.</li>
+            </ul>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); color: white; padding: 30px; border-radius: 12px; text-align: center; margin: 40px 0;">
+            <h2 style="color: white; margin-top: 0;">🎉 You're All Set!</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">
+                Once these 7 alarms are configured, your iPhone will automatically remind you of each activity throughout the day.
+            </p>
+            <p style="font-size: 1em;">
+                Use <strong>DAILY_SCHEDULE.html</strong> to see details of what to do when each alarm goes off!
+            </p>
+        </div>
+        
+        <p style="text-align: center; color: #666; margin-top: 40px;">
+            <a href="DAILY_SCHEDULE.html" style="color: #007AFF;">Daily Schedule</a> | 
+            <a href="DETAILED_CORE_PROGRAM.html" style="color: #007AFF;">Full Program</a> | 
+            <a href="QUICK_REFERENCE_GUIDE.md" style="color: #007AFF;">Quick Reference</a>
+        </p>
+    </div>
+</body>
+</html>

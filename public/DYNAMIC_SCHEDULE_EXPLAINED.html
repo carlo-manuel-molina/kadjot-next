@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Schedule Explained - Kadjot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #1e3c72;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+        }
+        .example {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .highlight {
+            background: #E3F2FD;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .key-point {
+            background: #E8F5E9;
+            padding: 15px;
+            border-left: 4px solid #4CAF50;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 5px;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🔄</span> Dynamic Schedule System</h1>
+        <p><strong>Your fitness program now adapts to ANY start date!</strong></p>
+
+        <h2><span class="emoji">🎯</span> How It Works</h2>
+        <div class="highlight">
+            <p><strong>Key Concept:</strong> Your program follows a <strong>7-day activity cycle</strong>, NOT the calendar week.</p>
+            <p>The cycle always starts on your chosen start date, regardless of what day of the week it is.</p>
+        </div>
+
+        <h2><span class="emoji">📅</span> The 7-Day Activity Cycle</h2>
+        <table>
+            <tr>
+                <th>Cycle Day</th>
+                <th>Activity Template</th>
+                <th>Morning</th>
+                <th>Lunch</th>
+                <th>Evening</th>
+            </tr>
+            <tr>
+                <td><strong>Day 1</strong></td>
+                <td>"Monday"</td>
+                <td>Core Workout (15 min)</td>
+                <td>Desk Reset</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><strong>Day 2</strong></td>
+                <td>"Tuesday"</td>
+                <td>Beach/Sand Running (20-30 min)</td>
+                <td>Desk Reset</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><strong>Day 3</strong></td>
+                <td>"Wednesday"</td>
+                <td>-</td>
+                <td>Desk Reset</td>
+                <td>Gym Workout (45-60 min)</td>
+            </tr>
+            <tr>
+                <td><strong>Day 4</strong></td>
+                <td>"Thursday"</td>
+                <td>Core Workout (15 min)</td>
+                <td>Desk Reset</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><strong>Day 5</strong></td>
+                <td>"Friday"</td>
+                <td>-</td>
+                <td>Desk Reset</td>
+                <td>Mobility/Stretching (12 min)</td>
+            </tr>
+            <tr>
+                <td><strong>Day 6</strong></td>
+                <td>"Saturday"</td>
+                <td>Beach Running + Gym (Flexible)</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><strong>Day 7</strong></td>
+                <td>"Sunday"</td>
+                <td>Mobility (Optional)</td>
+                <td>-</td>
+                <td>-</td>
+            </tr>
+        </table>
+
+        <h2><span class="emoji">📆</span> Example: Starting Tuesday, January 6</h2>
+        <div class="example">
+            <h3>Your Actual Calendar:</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Calendar Day</th>
+                    <th>Program Day</th>
+                    <th>Activities You'll See</th>
+                </tr>
+                <tr style="background: #E8F5E9;">
+                    <td>Jan 6</td>
+                    <td>Tuesday</td>
+                    <td><strong>Day 1</strong></td>
+                    <td>Core Workout + Desk Resets (Monday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 7</td>
+                    <td>Wednesday</td>
+                    <td><strong>Day 2</strong></td>
+                    <td>Beach Running + Desk Resets (Tuesday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 8</td>
+                    <td>Thursday</td>
+                    <td><strong>Day 3</strong></td>
+                    <td>Desk Resets + Gym (Wednesday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 9</td>
+                    <td>Friday</td>
+                    <td><strong>Day 4</strong></td>
+                    <td>Core Workout + Desk Resets (Thursday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 10</td>
+                    <td>Saturday</td>
+                    <td><strong>Day 5</strong></td>
+                    <td>Desk Resets + Mobility (Friday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 11</td>
+                    <td>Sunday</td>
+                    <td><strong>Day 6</strong></td>
+                    <td>Beach Running + Gym - Flexible (Saturday's template)</td>
+                </tr>
+                <tr>
+                    <td>Jan 12</td>
+                    <td>Monday</td>
+                    <td><strong>Day 7</strong></td>
+                    <td>Mobility (Optional) (Sunday's template)</td>
+                </tr>
+                <tr style="background: #E3F2FD;">
+                    <td>Jan 13</td>
+                    <td>Tuesday</td>
+                    <td><strong>Day 1</strong> (Week 2)</td>
+                    <td>Core Workout + Desk Resets (Cycle repeats!)</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2><span class="emoji">🔄</span> Example: Starting Friday, January 9</h2>
+        <div class="example">
+            <h3>Different Start Date, Same Pattern:</h3>
+            <table>
+                <tr>
+                    <th>Date</th>
+                    <th>Calendar Day</th>
+                    <th>Program Day</th>
+                    <th>Activities You'll See</th>
+                </tr>
+                <tr style="background: #E8F5E9;">
+                    <td>Jan 9</td>
+                    <td>Friday</td>
+                    <td><strong>Day 1</strong></td>
+                    <td>Core Workout + Desk Resets</td>
+                </tr>
+                <tr>
+                    <td>Jan 10</td>
+                    <td>Saturday</td>
+                    <td><strong>Day 2</strong></td>
+                    <td>Beach Running + Desk Resets</td>
+                </tr>
+                <tr>
+                    <td>Jan 11</td>
+                    <td>Sunday</td>
+                    <td><strong>Day 3</strong></td>
+                    <td>Desk Resets + Gym</td>
+                </tr>
+                <tr>
+                    <td>Jan 12</td>
+                    <td>Monday</td>
+                    <td><strong>Day 4</strong></td>
+                    <td>Core Workout + Desk Resets</td>
+                </tr>
+                <tr>
+                    <td>Jan 13</td>
+                    <td>Tuesday</td>
+                    <td><strong>Day 5</strong></td>
+                    <td>Desk Resets + Mobility</td>
+                </tr>
+                <tr>
+                    <td>Jan 14</td>
+                    <td>Wednesday</td>
+                    <td><strong>Day 6</strong></td>
+                    <td>Beach Running + Gym - Flexible</td>
+                </tr>
+                <tr>
+                    <td>Jan 15</td>
+                    <td>Thursday</td>
+                    <td><strong>Day 7</strong></td>
+                    <td>Mobility (Optional)</td>
+                </tr>
+                <tr style="background: #E3F2FD;">
+                    <td>Jan 16</td>
+                    <td>Friday</td>
+                    <td><strong>Day 1</strong> (Week 2)</td>
+                    <td>Core Workout + Desk Resets (Cycle repeats!)</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2><span class="emoji">⚙️</span> How The System Calculates</h2>
+        <div class="highlight">
+            <p><strong>Formula:</strong></p>
+            <code>Program Day Number = Days Since Start Date</code><br>
+            <code>Day of Cycle = Program Day Number % 7</code><br>
+            <code>Activities = Cycle Day Template (0=Monday, 1=Tuesday, etc.)</code>
+        </div>
+
+        <div class="example">
+            <h3>Example Calculation for Jan 8 (if you started Jan 6):</h3>
+            <ol>
+                <li>Days since start: <code>Jan 8 - Jan 6 = 2 days</code></li>
+                <li>Day of cycle: <code>2 % 7 = 2</code></li>
+                <li>Cycle day 2 = <strong>Wednesday's template</strong></li>
+                <li>Display: <strong>Desk Resets + Evening Gym</strong></li>
+            </ol>
+        </div>
+
+        <h2><span class="emoji">✅</span> Key Benefits</h2>
+        <div class="key-point">
+            <h3>1. Start ANY Day of the Week</h3>
+            <p>Tuesday, Friday, Sunday - doesn't matter! The program adapts.</p>
+        </div>
+
+        <div class="key-point">
+            <h3>2. Consistent Progression</h3>
+            <p>Your 12-week program runs in perfect 7-day cycles from your start date.</p>
+        </div>
+
+        <div class="key-point">
+            <h3>3. Week Counting Aligns</h3>
+            <p>Week 1 = Days 1-7, Week 2 = Days 8-14, etc. All based on YOUR timeline.</p>
+        </div>
+
+        <div class="key-point">
+            <h3>4. Calendar Events Match</h3>
+            <p>Downloaded .ics files use the correct program day activities, not calendar day.</p>
+        </div>
+
+        <h2><span class="emoji">📊</span> Week Tracking</h2>
+        <div class="highlight">
+            <p><strong>Program Weeks are based on your start date:</strong></p>
+            <ul>
+                <li><strong>Week 1:</strong> Day 0-6 (Start date + 6 days)</li>
+                <li><strong>Week 2:</strong> Day 7-13</li>
+                <li><strong>Week 3:</strong> Day 14-20</li>
+                <li>...and so on through Week 12</li>
+            </ul>
+            <p>The dashboard shows: <strong>"Current Week: 3"</strong> based on days since your start, not the calendar.</p>
+        </div>
+
+        <h2><span class="emoji">🎯</span> What This Means For You</h2>
+        <div class="example">
+            <p><strong>Starting Tuesday, January 6?</strong></p>
+            <ul>
+                <li>✅ Tuesday = Your program's "Monday" (Day 1) = Core workout day</li>
+                <li>✅ Wednesday = Your program's "Tuesday" (Day 2) = Beach running day</li>
+                <li>✅ Thursday = Your program's "Wednesday" (Day 3) = Gym day</li>
+                <li>✅ Next Tuesday (Jan 13) = Start of Week 2 = Core workout again</li>
+            </ul>
+            <p><strong>Result:</strong> Perfect workout distribution regardless of calendar!</p>
+        </div>
+
+        <h2><span class="emoji">💡</span> Pro Tip</h2>
+        <div class="key-point">
+            <p>The activity names in the dashboard (Core Workout, Beach Running, etc.) show what you're doing based on your program cycle, not the calendar day name.</p>
+            <p>Just follow what the dashboard shows each day - the system handles all the math for you!</p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #eee;">
+            <p><strong>🎯 Your Program, Your Schedule! 🎯</strong></p>
+            <p style="color: #666; font-size: 0.9em;">Kadjot Fitness - Dynamic Scheduling System</p>
+        </div>
+    </div>
+</body>
+</html>
