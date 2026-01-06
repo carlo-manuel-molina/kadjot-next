@@ -189,3 +189,73 @@ NEXT AGENT:
 EWUS: 2026-01-07 Wednesday 06:15:00 PST
 Status: COMMITTED & PUSHED (commit: 7478ec2)
 ================================================================================
+
+================================================================================
+WUS-004: Fix Calendar Export - Share Display Date
+================================================================================
+SWUS: 2026-01-07 Wednesday 06:20:00 PST
+Branch: main
+
+OBJECTIVE:
+Fix calendar export always downloading January 6 entries. QuickActions component
+was not aware of the selected date in TodaysActivities component (they were siblings).
+
+ISSUE IDENTIFIED:
+- TodaysActivities had its own displayDate state
+- QuickActions always used useActivities() without date parameter
+- When user navigated to future/past days, calendar export still exported today's activities
+- Siblings don't share state
+
+COMPLETED TASKS:
+1. ✅ Lifted displayDate state to parent component (app/page.tsx)
+2. ✅ Passed displayDate and setDisplayDate as props to TodaysActivities
+3. ✅ Passed displayDate as prop to QuickActions
+4. ✅ Updated QuickActions to use displayDate in useActivities() call
+5. ✅ Updated generateCalendarEvent() to use displayDate instead of "today"
+6. ✅ Updated generateDailyPlan() to use displayDate instead of "today"
+7. ✅ Fixed all date references in ICS file generation
+
+TECHNICAL CHANGES:
+Files Modified:
+- app/page.tsx
+  * Added displayDate state (using getCurrentLocalDate())
+  * Pass displayDate and setDisplayDate to TodaysActivities
+  * Pass displayDate to QuickActions
+
+- components/dashboard/TodaysActivities.tsx
+  * Accept displayDate and setDisplayDate as props
+  * Remove internal selectedDate state
+  * Use props instead of internal state
+  * Updated navigation handlers to use setDisplayDate
+
+- components/dashboard/QuickActions.tsx
+  * Accept displayDate as prop
+  * Pass displayDate to useActivities({ date: displayDate })
+  * Use displayDate in calendar event generation (eventDate, not "today")
+  * Use displayDate in daily plan generation (planDate, not "today")
+  * Updated filename generation to use correct date
+
+BEFORE:
+- Navigate to Jan 8 (tomorrow)
+- Click "Export to Calendar"
+- Downloads: kadjot-tuesday-2026-01-06.ics ❌ (wrong date!)
+
+AFTER:
+- Navigate to Jan 8 (tomorrow)
+- Click "Export to Calendar"
+- Downloads: kadjot-wednesday-2026-01-08.ics ✅ (correct date!)
+
+CURRENT STATE:
+✅ Calendar export uses correct displayed date
+✅ Daily plan export uses correct displayed date
+✅ All date references consistent across components
+✅ State properly lifted to parent component
+
+NEXT AGENT:
+- Branch: main
+- App running on: Frontend (localhost:3001), Backend (localhost:3000)
+- Ready for commit & push
+
+EWUS: 2026-01-07 Wednesday 06:30:00 PST
+Status: READY FOR COMMIT & PUSH
+================================================================================

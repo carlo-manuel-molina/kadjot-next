@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import ProgramSetup from '@/components/dashboard/ProgramSetup';
 import ProgressStats from '@/components/dashboard/ProgressStats';
 import TodaysActivities from '@/components/dashboard/TodaysActivities';
@@ -9,6 +10,18 @@ import { useProgramStats } from '@/lib/hooks/useProgramStats';
 
 export default function Home() {
   const { isProgramStarted } = useProgramStats();
+  
+  // Get current local date helper
+  const getCurrentLocalDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  // Shared display date state for both TodaysActivities and QuickActions
+  const [displayDate, setDisplayDate] = useState<string>(getCurrentLocalDate());
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-200 via-slate-300 to-stone-200">
@@ -55,12 +68,12 @@ export default function Home() {
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {/* Today's Activities - Full width on mobile, 2 columns on desktop */}
             <div className="lg:col-span-2">
-              <TodaysActivities />
+              <TodaysActivities displayDate={displayDate} setDisplayDate={setDisplayDate} />
             </div>
 
             {/* Quick Actions - Full width on mobile, 1 column on desktop */}
             <div className="lg:col-span-1">
-              <QuickActions />
+              <QuickActions displayDate={displayDate} />
             </div>
           </div>
         </div>

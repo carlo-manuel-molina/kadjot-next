@@ -1,29 +1,45 @@
 'use client';
 
-import { useState } from 'react';
 import { useActivities } from '@/lib/hooks/useActivities';
 import { useProgramStats } from '@/lib/hooks/useProgramStats';
 import ActivityCard from './ActivityCard';
 
-export default function TodaysActivities() {
+interface TodaysActivitiesProps {
+  displayDate: string;
+  setDisplayDate: (date: string) => void;
+}
+
+export default function TodaysActivities({ displayDate, setDisplayDate }: TodaysActivitiesProps) {
   const { isProgramStarted } = useProgramStats();
-  const [selectedDate, setSelectedDate] = useState<string | undefined>(undefined);
-  const { todaysActivities, completionPercentage, completedCount, totalCount, viewDate, currentDate } = useActivities({ date: selectedDate });
+  const { todaysActivities, completionPercentage, completedCount, totalCount } = useActivities({ date: displayDate });
+  
+  // Get current date for comparison
+  const getCurrentLocalDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  
+  const currentDate = getCurrentLocalDate();
 
   const handlePreviousDay = () => {
-    const current = new Date(selectedDate || currentDate);
+    const current = new Date(displayDate);
     current.setDate(current.getDate() - 1);
-    setSelectedDate(current.toISOString().split('T')[0]);
+    const newDate = current.toISOString().split('T')[0];
+    setDisplayDate(newDate);
   };
 
   const handleNextDay = () => {
-    const current = new Date(selectedDate || currentDate);
+    const current = new Date(displayDate);
     current.setDate(current.getDate() + 1);
-    setSelectedDate(current.toISOString().split('T')[0]);
+    const newDate = current.toISOString().split('T')[0];
+    setDisplayDate(newDate);
   };
 
   const handleToday = () => {
-    setSelectedDate(undefined); // Reset to current date
+    setDisplayDate(currentDate);
   };
 
   const formatDate = (dateString: string) => {
@@ -32,8 +48,8 @@ export default function TodaysActivities() {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const isToday = viewDate === currentDate;
-  const isFuture = new Date(viewDate) > new Date(currentDate);
+  const isToday = displayDate === currentDate;
+  const isFuture = new Date(displayDate) > new Date(currentDate);
 
   if (!isProgramStarted) {
     return (
@@ -68,7 +84,7 @@ export default function TodaysActivities() {
               📋 {isToday ? "Today's Activities" : "Daily Activities"}
             </h2>
             <p className="mt-1 text-sm font-bold text-gray-700">
-              {formatDate(viewDate)}
+              {formatDate(displayDate)}
               {isToday && <span className="ml-2 text-green-600">• Today</span>}
               {isFuture && <span className="ml-2 text-blue-600">• Future</span>}
             </p>

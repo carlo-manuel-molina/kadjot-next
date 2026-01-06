@@ -4,14 +4,18 @@ import { useActivities } from '@/lib/hooks/useActivities';
 import { useProgramStats } from '@/lib/hooks/useProgramStats';
 import { getCycleDayName } from '@/lib/utils/activityHelpers';
 
-export default function QuickActions() {
+interface QuickActionsProps {
+  displayDate: string;
+}
+
+export default function QuickActions({ displayDate }: QuickActionsProps) {
   const { isProgramStarted, daysInProgram } = useProgramStats();
-  const { todaysActivities } = useActivities();
+  const { todaysActivities } = useActivities({ date: displayDate });
 
   const generateCalendarEvent = () => {
     if (!isProgramStarted) return;
 
-    const today = new Date();
+    const eventDate = new Date(displayDate);
     const cycleDayName = getCycleDayName(daysInProgram);
     
     // Create ICS file content
@@ -23,7 +27,7 @@ export default function QuickActions() {
       const durationMatch = activity.duration.match(/(\d+)/);
       const durationMinutes = durationMatch ? parseInt(durationMatch[1]) : 30;
       
-      const startTime = new Date(today);
+      const startTime = new Date(eventDate);
       startTime.setHours(hours, minutes, 0, 0);
       
       const endTime = new Date(startTime);
@@ -35,7 +39,7 @@ export default function QuickActions() {
       };
 
       return `BEGIN:VEVENT
-UID:kadjot-${today.toISOString()}-${activity.id}
+UID:kadjot-${displayDate}-${activity.id}
 DTSTAMP:${formatICSDate(new Date())}
 DTSTART:${formatICSDate(startTime)}
 DTEND:${formatICSDate(endTime)}
@@ -58,7 +62,7 @@ END:VCALENDAR`;
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kadjot-${cycleDayName.toLowerCase()}-${today.toISOString().split('T')[0]}.ics`;
+    link.download = `kadjot-${cycleDayName.toLowerCase()}-${displayDate}.ics`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -69,14 +73,14 @@ END:VCALENDAR`;
     if (!isProgramStarted) return;
 
     const cycleDayName = getCycleDayName(daysInProgram);
-    const today = new Date().toLocaleDateString();
+    const planDate = new Date(displayDate).toLocaleDateString();
 
     const htmlContent = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kadjot Fitness - ${cycleDayName} - ${today}</title>
+    <title>Kadjot Fitness - ${cycleDayName} - ${planDate}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -138,7 +142,7 @@ END:VCALENDAR`;
 <body>
     <div class="header">
         <h1>🏋️ Kadjot Fitness - ${cycleDayName}</h1>
-        <p>${today}</p>
+        <p>${planDate}</p>
     </div>
     ${todaysActivities.map(activity => `
     <div class="activity">
@@ -160,7 +164,7 @@ END:VCALENDAR`;
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kadjot-daily-plan-${today.replace(/\//g, '-')}.html`;
+    link.download = `kadjot-daily-plan-${planDate.replace(/\//g, '-')}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
