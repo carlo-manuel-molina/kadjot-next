@@ -23,9 +23,8 @@ export function useProgramStats() {
   }, [programData.startDate]);
 
   const daysInProgram = useMemo(() => {
-    if (!programData.startDate || !isProgramStarted) return 0;
-    return getDaysSinceStart(programData.startDate);
-  }, [programData.startDate, isProgramStarted]);
+    return 84; // 12 weeks × 7 days = 84 days total program length
+  }, []);
 
   const currentWeek = useMemo(() => {
     if (!programData.startDate || !isProgramStarted) return 0;
