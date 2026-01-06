@@ -9,7 +9,8 @@ import { ACTIVITY_WINDOW_MINUTES } from './constants';
 export function getActivityStatus(
   activity: Activity,
   isCompleted: boolean,
-  isProgramStarted: boolean
+  isProgramStarted: boolean,
+  activityDate?: string // YYYY-MM-DD format
 ): ActivityStatus {
   if (!isProgramStarted) {
     return 'scheduled';
@@ -19,20 +20,47 @@ export function getActivityStatus(
     return 'completed';
   }
 
-  const now = getCurrentMinutes();
+  // Get current local date for comparison
+  const now = new Date();
+  const currentDate = getCurrentLocalDate();
+  const targetDate = activityDate || currentDate;
+
+  // Future dates: all activities are "upcoming"
+  if (targetDate > currentDate) {
+    return 'upcoming';
+  }
+
+  // Past dates: incomplete activities are "missed"
+  if (targetDate < currentDate) {
+    return 'missed';
+  }
+
+  // Today: check time windows
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
   const activityMinutes = timeToMinutes(activity.time);
   const startWindow = activityMinutes - ACTIVITY_WINDOW_MINUTES;
   const endWindow = activityMinutes + ACTIVITY_WINDOW_MINUTES;
 
-  if (now < startWindow) {
+  if (currentMinutes < startWindow) {
     return 'upcoming';
   }
 
-  if (now >= startWindow && now <= endWindow) {
+  if (currentMinutes >= startWindow && currentMinutes <= endWindow) {
     return 'ongoing';
   }
 
   return 'missed';
+}
+
+/**
+ * Get current local date in YYYY-MM-DD format (not UTC!)
+ */
+function getCurrentLocalDate(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 /**

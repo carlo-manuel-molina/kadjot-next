@@ -59,7 +59,7 @@ export function useActivities(options: UseActivitiesOptions = {}) {
 
     return activities.map((activity) => {
       const isCompleted = todayProgress[activity.id] || false;
-      const status = getActivityStatus(activity, isCompleted, isProgramStarted);
+      const status = getActivityStatus(activity, isCompleted, isProgramStarted, todayKey);
 
       return {
         ...activity,

@@ -124,3 +124,68 @@ NEXT AGENT:
 EWUS: 2026-01-07 Wednesday 06:05:00 PST
 Status: COMMITTED & PUSHED (commit: 9de06c7)
 ================================================================================
+
+================================================================================
+WUS-003: Fix Activity Status - Date-Aware Logic
+================================================================================
+SWUS: 2026-01-07 Wednesday 06:10:00 PST
+Branch: main
+
+OBJECTIVE:
+Fix activity status to be date-aware. Future days were showing "missed" status 
+for activities that haven't happened yet because status calculation only checked 
+time of day, not the actual date.
+
+ISSUE IDENTIFIED:
+- getActivityStatus() only compared current time vs activity time
+- Didn't check which date the activity was for
+- Future days with early morning activities showed as "missed"
+- Past days all showing correct "missed" for incomplete activities
+
+COMPLETED TASKS:
+1. ✅ Modified getActivityStatus() to accept activityDate parameter
+2. ✅ Added date comparison logic:
+   - Future dates: all activities = "upcoming"
+   - Past dates: incomplete activities = "missed"
+   - Today: time-based status (upcoming/ongoing/missed)
+3. ✅ Updated useActivities hook to pass date to getActivityStatus
+4. ✅ Added getCurrentLocalDate() helper function
+5. ✅ Tested: Future activities (Jan 8) now correctly show "Upcoming"
+
+TECHNICAL CHANGES:
+Files Modified:
+- lib/utils/activityHelpers.ts
+  * Added activityDate optional parameter to getActivityStatus()
+  * Added date comparison logic before time comparison
+  * Added getCurrentLocalDate() helper function
+  * Future dates: return 'upcoming'
+  * Past dates: return 'missed'
+  * Today: use existing time-window logic
+
+- lib/hooks/useActivities.ts
+  * Pass todayKey (date) as 4th parameter to getActivityStatus()
+  * Ensures each activity knows what date it belongs to
+
+BEFORE (Time-only logic):
+- Future day 6:00 AM activity at 8:00 PM = "missed" ❌
+- Today 6:00 AM activity at 8:00 PM = "missed" ✅
+
+AFTER (Date-aware logic):
+- Future day 6:00 AM activity at 8:00 PM = "upcoming" ✅
+- Today 6:00 AM activity at 8:00 PM = "missed" ✅
+
+CURRENT STATE:
+✅ Future activities show "Upcoming" badge (yellow)
+✅ Past incomplete activities show "Missed" badge (amber)
+✅ Today's activities use time-based status correctly
+✅ Navigation between dates works properly
+✅ All date-related status logic is consistent
+
+NEXT AGENT:
+- Branch: main
+- App running on: Frontend (localhost:3001), Backend (localhost:3000)
+- Ready for commit & push
+
+EWUS: 2026-01-07 Wednesday 06:15:00 PST
+Status: READY FOR COMMIT & PUSH
+================================================================================
