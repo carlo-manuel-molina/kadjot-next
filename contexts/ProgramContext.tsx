@@ -155,8 +155,8 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
       const totalActivities = activities.length;
       
       // ONLY count activities that are actually part of this day's schedule
-      const validActivityIds = activities.map(a => a.id);
-      const completedCount = validActivityIds.filter(id => dayProgress[id] === true).length;
+      const validActivityIds = activities.map((a: { id: string }) => a.id);
+      const completedCount = validActivityIds.filter((id: string) => dayProgress[id] === true).length;
       
       if (completedCount === totalActivities && totalActivities > 0) {
         completedDays.push(dateKey);
@@ -210,21 +210,28 @@ export function ProgramProvider({ children }: { children: ReactNode }) {
       newProgress[dateKey][activityId] = nowCompleted;
 
       // Check if day is 100% complete
-      // Get today's activity count based on program day
+      // Get activity count based on the SPECIFIC DATE being toggled
       const { WEEK_ACTIVITIES } = require('../lib/utils/constants');
-      const { getCycleDayName, getDaysSinceStart } = require('../lib/utils/activityHelpers');
+      const { getCycleDayName } = require('../lib/utils/activityHelpers');
       
       let updatedCompletedDays = [...prev.completedDays];
       
       if (prev.startDate) {
-        const programDays = getDaysSinceStart(prev.startDate);
-        const dayName = getCycleDayName(programDays);
+        // Calculate program day for the SPECIFIC DATE being toggled, not today
+        const startDate = new Date(prev.startDate);
+        startDate.setHours(0, 0, 0, 0);
+        const toggleDate = new Date(dateKey);
+        toggleDate.setHours(0, 0, 0, 0);
+        const diffTime = toggleDate.getTime() - startDate.getTime();
+        const daysSinceStart = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 for 1-indexed
+        
+        const dayName = getCycleDayName(daysSinceStart);
         const activities = WEEK_ACTIVITIES[dayName] || [];
         const totalActivities = activities.length;
         
         // ONLY count activities that are actually part of this day's schedule
-        const validActivityIds = activities.map(a => a.id);
-        const completedCount = validActivityIds.filter(id => newProgress[dateKey][id] === true).length;
+        const validActivityIds = activities.map((a: { id: string }) => a.id);
+        const completedCount = validActivityIds.filter((id: string) => newProgress[dateKey][id] === true).length;
         const isFullyComplete = completedCount === totalActivities && totalActivities > 0;
         
         // Update completedDays array

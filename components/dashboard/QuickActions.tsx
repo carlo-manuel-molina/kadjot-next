@@ -147,8 +147,8 @@ END:VCALENDAR`;
     ${todaysActivities.map(activity => `
     <div class="activity">
         <h2>${activity.name}</h2>
-        ${activity.instructions ? `<div class="instructions">${activity.instructions}</div>` : ''}
-        ${activity.instructionsUrl ? `<div><a href="${activity.instructionsUrl}" target="_blank">View Instructions →</a></div>` : ''}
+        ${activity.details ? `<div class="instructions">${activity.details}</div>` : ''}
+        ${activity.link ? `<div><a href="${activity.link}" target="_blank">View Instructions →</a></div>` : ''}
         <div class="checkbox">
             <label>
                 <input type="checkbox"> Completed
